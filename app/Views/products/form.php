@@ -1,0 +1,14 @@
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
+<?php $editing = $product !== null; $action = $editing ? site_url('products/'.$product['id']) : site_url('products'); ?>
+<div class="backline"><a href="<?= site_url('products') ?>">← Back to products</a></div><section class="page-heading"><div><span class="eyebrow dark">PRODUCT MANAGEMENT</span><h1><?= $editing ? 'Edit product' : 'Add new product' ?></h1><p><?= $editing ? 'Update information and inventory for this product.' : 'Create a new item for your product catalog.' ?></p></div></section>
+<form action="<?= $action ?>" method="post" enctype="multipart/form-data" class="form-page"><?= csrf_field() ?>
+ <section class="panel form-panel"><div class="panel-heading"><h3>Product details</h3><span class="muted small">Fields marked * are required</span></div><div class="form-padding"><div class="form-grid">
+  <label class="field field-span"><span>Product name *</span><input type="text" name="name" required maxlength="100" placeholder="e.g. Classic Milk Tea" value="<?= esc(old('name', $product['name'] ?? ''),'attr') ?>"></label>
+  <label class="field"><span>Unit price (PHP) *</span><div class="input-prefix"><span>₱</span><input type="number" name="price" min="0.01" max="9999999.99" step="0.01" required placeholder="0.00" value="<?= esc(old('price', $product['price'] ?? ''),'attr') ?>"></div></label>
+  <label class="field"><span>Stock quantity *</span><input type="number" name="stock_quantity" min="0" max="1000000" step="1" required value="<?= esc(old('stock_quantity', $product['stock_quantity'] ?? '0'),'attr') ?>"></label>
+  <label class="field"><span>Availability</span><select name="is_active"><option value="1" <?= (string)old('is_active', $product['is_active'] ?? '1') === '1' ? 'selected' : '' ?>>Active — can be sold</option><option value="0" <?= (string)old('is_active', $product['is_active'] ?? '1') === '0' ? 'selected' : '' ?>>Archived — hidden from checkout</option></select></label>
+ </div></div></section>
+ <section class="panel form-panel"><div class="panel-heading"><h3>Product image</h3><span class="muted small">Automatically center-cropped to a 640 × 640 JPEG</span></div><div class="form-padding upload-layout"><img class="upload-preview" alt="Product <?= $editing ? 'image' : 'placeholder' ?>" src="<?= base_url($product['image'] ?? 'assets/img/product-placeholder.svg') ?>" data-preview-for="image"><div class="upload-copy"><label class="field"><span>Choose photo (JPG, PNG, WebP)</span><input type="file" name="image" id="image" accept="image/jpeg,image/png,image/webp"></label><p class="muted small">Maximum size: 2 MB. The original is not stored. PHP GD is required.</p></div></div></section>
+ <div class="form-actions"><a class="btn btn-secondary" href="<?= site_url('products') ?>">Cancel</a><button type="submit" class="btn btn-primary"><?= $editing ? 'Save changes' : 'Create product' ?> →</button></div>
+</form><?= $this->endSection() ?>

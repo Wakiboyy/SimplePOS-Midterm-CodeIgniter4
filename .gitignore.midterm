@@ -1,0 +1,9 @@
+# Merge these entries into the official CodeIgniter appstarter .gitignore
+.env
+/vendor/
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+/public/uploads/*
+!.gitkeep

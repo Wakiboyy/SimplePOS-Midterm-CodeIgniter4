@@ -1,0 +1,11 @@
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
+<section class="page-heading"><div><span class="eyebrow dark">CATALOG MANAGEMENT</span><h1>Products <span class="count-pill"><?= count($products) ?></span></h1><p>Manage stock levels, pricing, and product images.</p></div><a class="btn btn-primary" href="<?= site_url('products/new') ?>">＋ Add product</a></section>
+<section class="panel"><div class="panel-heading"><h3>Product catalog</h3><span class="muted small">Archived products remain visible for past sales</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Product</th><th>Unit price</th><th>In stock</th><th>Status</th><th class="align-right">Actions</th></tr></thead><tbody><?php if (!$products): ?><tr><td colspan="5"><div class="empty"><strong>No products yet</strong><span>Add your first product to get started.</span></div></td></tr><?php else: foreach($products as $product): ?><tr>
+<td><div class="entity-cell"><img alt="" class="product-thumb" src="<?= base_url($product['image'] ?: 'assets/img/product-placeholder.svg') ?>"><div><strong><?= esc($product['name']) ?></strong><small>ID #<?= (int)$product['id'] ?></small></div></div></td>
+<td class="strong">₱<?= number_format((float)$product['price'],2) ?></td>
+<td><span class="stock-number <?= (int)$product['stock_quantity'] <= 5 ? 'stock-low' : '' ?>"><?= (int)$product['stock_quantity'] ?></span></td>
+<td><?php if (!(int)$product['is_active']): ?><span class="pill pill-neutral">Archived</span><?php elseif((int)$product['stock_quantity'] <= 5): ?><span class="pill pill-warn">Low stock</span><?php else: ?><span class="pill pill-success">Active</span><?php endif; ?></td>
+<td><div class="table-actions"><a class="btn btn-quiet btn-sm" href="<?= site_url('products/'.$product['id'].'/edit') ?>">Edit</a><form method="post" action="<?= site_url('products/'.$product['id'].'/delete') ?>" onsubmit="return confirm('Remove this product? Sold products are archived instead of deleted.')"><?= csrf_field() ?><button class="btn btn-danger-outline btn-sm" type="submit">Remove</button></form></div></td>
+</tr><?php endforeach; endif; ?></tbody></table></div></section>
+<?= $this->endSection() ?>
